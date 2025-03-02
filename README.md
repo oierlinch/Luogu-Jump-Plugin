@@ -1,4 +1,5 @@
-专栏、剪切板和洛谷讨论区被封印了，此脚本可自动跳转至相应保存站。请复制下方该插件代码至油猴使用。最后更新于 2025-02-15 14:47。
+## 介绍
+专栏、剪切板和洛谷讨论区被封印了，此脚本可自动跳转至相应保存站。可自动识别自己的剪切板、文章、置顶帖、管理贴、推荐文章等可见内容不跳转，请复制下方该插件代码至油猴使用。最后更新于 2025-02-15 14:47。
 
 > **已知 Bug1：**
 > 由于洛谷前端和技术原因，在从新前端跳转至帖子时可能无法直接正常跳转保存站。
@@ -12,7 +13,9 @@
 
 如果脚本有其他 Bug 或您有已知 Bug 的解决方案，欢迎向 @[linch](https://www.luogu.com.cn/user/737242) 反馈，我们会及时处理！
 
-制作者：@[linch](https://www.luogu.com.cn/user/737242)（部分代码由 @[Special_Tony](https://www.luogu.com.cn/user/743373) 提供）。
+制作者：@[linch](https://www.luogu.com.cn/user/737242)（部分代码由 @[Special_Tony](https://www.luogu.com.cn/user/743373) 提供），采用 GPL-3.0 开源协议。
+
+[Github 仓库](https://github.com/oierlinch/luogutzcj)，欢迎提交 Issues。
 
 ```javascript
 // ==UserScript==
