@@ -22,7 +22,7 @@
 // @name         洛谷保存站自动跳转
 // @namespace    https://www.tampermonkey.net/
 // @version      1.1
-// @description  luogu.com 和洛谷讨论区被封印了，此脚本可自动跳转至相应保存站，建议与 https://www.luogu.me/paste/dcwt2uo1 搭配使用。产品链接 https://www.cnblogs.com/linch737242/p/18717023/luogutzcj。
+// @description  luogu.com 和洛谷讨论区被封印了，此脚本可自动跳转至相应保存站，建议与 https://www.luogu.me/paste/dcwt2uo1 搭配使用。产品链接 https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin。
 // @author       linch & sz_jinzikai
 // @match        *://*.luogu.com/article/*
 // @match        *://*.luogu.com/paste/*
