@@ -15,7 +15,7 @@
 
 制作者：@[linch](https://www.luogu.com.cn/user/737242)（部分代码由 @[Special_Tony](https://www.luogu.com.cn/user/743373) 提供），采用 GPL-3.0 开源协议。
 
-[Github 仓库](https://github.com/oierlinch/luogutzcj)，欢迎提交 Issues。
+[Github 仓库](https://github.com/oierlinch/luogutzcj)，欢迎提交建议。
 
 ```javascript
 // ==UserScript==
