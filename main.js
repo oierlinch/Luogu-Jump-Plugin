@@ -41,7 +41,7 @@
         }
     }
     else{
-        //云剪切板/专栏跳转 by sz_jinzikai
+        //云剪切板/专栏跳转 其中部分代码 by sz_jinzikai
         b = "";
         for (let i = 0; i < a.length; i++) {
             if (i < a.length - 4 && a[i] == '.' && a[i + 1] == 'c' && a[i + 2] == 'o' && a[i + 3] == 'm') {
