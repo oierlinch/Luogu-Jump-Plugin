@@ -1,5 +1,5 @@
 ## 介绍
-专栏、剪切板和洛谷讨论区被封印了，此脚本可自动跳转至相应保存站。可自动识别自己的剪切板、文章、置顶帖、管理贴、推荐文章等可见内容不跳转，请复制下方该插件代码至油猴使用。最后更新于 2025-02-15 14:47。
+专栏、剪切板和洛谷讨论区被封印了，此脚本可自动跳转至相应保存站。可自动识别自己的剪切板、文章、置顶帖、管理贴、推荐文章等可见内容不跳转，没有被墙住（即内容可见）时不跳转，请复制下方该插件代码至油猴使用。最后更新于 2025-03-23 10:59。
 
 > **已知 Bug1：**
 > 由于洛谷前端和技术原因，在从新前端跳转至帖子时可能无法直接正常跳转保存站。
@@ -15,18 +15,19 @@
 
 制作者：@[linch](https://www.luogu.com.cn/user/737242)（部分代码由 @[Special_Tony](https://www.luogu.com.cn/user/743373) 提供），采用 GPL-3.0 开源协议。
 
-[Github 仓库](https://github.com/oierlinch/luogutzcj)，欢迎提交建议。
+[Github 仓库](https://github.com/oierlinch/Luogu-Jump-Plugin)，欢迎提交建议。
 
 ```javascript
 // ==UserScript==
 // @name         洛谷保存站自动跳转
 // @namespace    https://www.tampermonkey.net/
-// @version      1.1
-// @description  luogu.com 和洛谷讨论区被封印了，此脚本可自动跳转至相应保存站，建议与 https://github.com/Chingxu-Ying/Expanded-Extend-Luogu 搭配使用。产品链接 https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin。
+// @version      1.2
+// @description  luogu.com 和洛谷讨论区被封印了，此脚本可自动跳转至相应保存站，产品链接 https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin。
 // @author       linch & sz_jinzikai
 // @match        *://*.luogu.com/article/*
 // @match        *://*.luogu.com/paste/*
 // @match        *://*.luogu.com.cn/discuss/*
+// @match        *://*.luogu.com/discuss/*
 // @icon         https://cdn.luogu.com.cn/upload/image_hosting/u8fj7st9.png
 // ==/UserScript==
 
@@ -52,6 +53,12 @@
             }
             window.location.replace(b);
         }
+        else if(t.indexOf("You are unable to access</span> luogu.com</h2>")>=0){
+            for(let i=c;i<a.length;i++){
+                b+=a[i];
+            }
+            window.location.replace(b);
+        }
     }
     else{
         //云剪切板/专栏跳转 by sz_jinzikai
@@ -63,7 +70,7 @@
             }
             else b+=a[i];
         }
-        window.location.replace(b);
+        if(t.indexOf("You are unable to access</span> luogu.com</h2>")>=0) window.location.replace(b);
     }
     /*
    已知 Bug1：由于洛谷前端和技术原因，在从新前端跳转至帖子时可能无法直接正常跳转。
@@ -75,14 +82,19 @@
    */
 })();
 ```
-建议与 <https://github.com/Chingxu-Ying/Expanded-Extend-Luogu> 搭配使用。
+
+### 项目应用
+已搭载于 <https://github.com/Chingxu-Ying/Expanded-Extend-Luogu>，欢迎使用该插件获得更多功能。
 
 ---
 
 ## 更新日志
 
 ### V1.0 2025/2/15
-完成代码编写，优化用户体验。
+完成代码编写。
 
 ### V1.1 2025/2/15
 特判置顶帖不跳转。
+
+### V1.2 2025/3/23
+特判没有被墙住（即内容可见）时不跳转，新增国际站帖子被墙后跳转。
