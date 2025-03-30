@@ -13,7 +13,7 @@
 
 如果脚本有其他 Bug 或您有已知 Bug 的解决方案，欢迎向 @[linch](https://www.luogu.com.cn/user/737242) 反馈，我们会及时处理！
 
-制作者：@[linch](https://www.luogu.com.cn/user/737242)（部分代码由 @[Special_Tony](https://www.luogu.com.cn/user/743373) 提供），采用 GPL-3.0 开源协议。
+制作者：@[linch](https://www.luogu.com.cn/user/737242)（部分代码由 @[Vitamin_B](https://www.luogu.com.cn/user/743373) 提供），采用 GPL-3.0 开源协议。
 
 [Github 仓库](https://github.com/oierlinch/Luogu-Jump-Plugin)，欢迎提交建议。
 
