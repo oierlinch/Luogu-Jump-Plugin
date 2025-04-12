@@ -1,13 +1,11 @@
 // ==UserScript==
 // @name         洛谷保存站自动跳转
 // @namespace    https://www.tampermonkey.net/
-// @version      1.3
-// @description  luogu.com 和洛谷讨论区部分帖子被封印了，此脚本可自动跳转至相应保存站，产品链接 https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin。
+// @version      1.4
+// @description  luogu.com 和洛谷讨论区部分帖子被封印了，此脚本可自动跳转至相应保存站，产品链接 https://www.luogu.com.cn/article/h1qvkk68。由于洛谷专栏公开可见需要审核，无法访问时请使用备用链接 https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin 或 https://www.luogu.me/article/h1qvkk68。
 // @author       linch & Vitamin_B
-// @match        *://*.luogu.com/article/*
-// @match        *://*.luogu.com/paste/*
-// @match        *://*.luogu.com.cn/discuss/*
-// @match        *://*.luogu.com/discuss/*
+// @match        *://*.luogu.com/*
+// @match        *://*.luogu.com.cn/*
 // @icon         https://cdn.luogu.com.cn/upload/image_hosting/u8fj7st9.png
 // ==/UserScript==
 
@@ -15,7 +13,7 @@
 
 (function() {
     'use strict';
-    window.addEventListener('load', function() {
+    function work(){
         let a = document.URL;
         let t = document.documentElement.outerHTML;
         let b = "https://lglg.top/";
@@ -54,18 +52,14 @@
                 }
                 else b+=a[i];
             }
-            if(t.indexOf("You are unable to access</span> luogu.com</h2>")>=0){
+            if(t.indexOf("You are unable to access</span> luogu.com</h2>")>=0 && (a.indexOf("article")>=0 || a.indexOf("paste")>=0)){
                 console.log("即将跳转至云剪切板和专栏保存站");
                 window.location.replace(b);
             }
         }
-        /*
-   已知 Bug1：由于洛谷前端和技术原因，在从新前端跳转至帖子时可能无法直接正常跳转。
-
-   此时有两种简单便捷的方案：
-
-   - 打开时在新标签页中打开（快捷键 Ctrl+点击链接）。（应该很多人都有这个习惯）
-   - 也可以在加载完成后手动点击刷新或按 F5 刷新页面。
-   */
+    }
+    window.addEventListener('load', function() {
+        work();
+        setInterval(work,2000);
     }, false);
 })();
