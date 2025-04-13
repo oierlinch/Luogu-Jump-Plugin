@@ -117,6 +117,6 @@
 #### V1.4 - 2025/4/12
 - 修复新前端导致的跳转 Bug，详情见 [Issue #1](https://github.com/oierlinch/Luogu-Jump-Plugin/issues/1)。
 
-### V1.5 - XXXX/X/XX
+#### V1.5 - XXXX/X/XX
 - 制作中
 - 优化项目介绍，部分内容由 AI 生成。
