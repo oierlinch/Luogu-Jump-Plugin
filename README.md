@@ -96,7 +96,7 @@
 
 该插件已集成至 [Expanded Extend Luogu](https://github.com/Chingxu-Ying/Expanded-Extend-Luogu)，欢迎使用该插件获取更多功能！
 
-## 更新日志
+### 更新日志
 
 #### V1.0 - 2025/2/15
 - 初步完成代码编写。
