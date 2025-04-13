@@ -94,6 +94,8 @@
 })();
 ```
 
+---
+
 ### 项目应用
 
 该插件已集成至 [Expanded Extend Luogu](https://github.com/Chingxu-Ying/Expanded-Extend-Luogu)，欢迎使用该插件获取更多功能！
@@ -121,5 +123,5 @@
 - 修复新前端导致的跳转 Bug，详情见 [Issue #1](https://github.com/oierlinch/Luogu-Jump-Plugin/issues/1)。
 
 #### V1.5 - XXXX/X/XX
-- 
+- 制作中
 - 使用 AI 优化项目介绍。
