@@ -9,10 +9,10 @@
 
 如发现 Bug 或有解决方案，欢迎通过洛谷私信反馈给 @[linch](https://www.luogu.com.cn/user/737242)，我们将及时处理！
 
-**制作者**：@[linch](https://www.luogu.com.cn/user/737242)。
-**贡献者**：@[Vitamin_B](https://www.luogu.com.cn/user/743373) 提供部分代码。
-**开源协议**：GPL-3.0。
-**Github 仓库**：[Luogu-Jump-Plugin](https://github.com/oierlinch/Luogu-Jump-Plugin)。
+- **制作者**：@[linch](https://www.luogu.com.cn/user/737242)。
+- **贡献者**：@[Vitamin_B](https://www.luogu.com.cn/user/743373) 提供部分代码。
+- **开源协议**：GPL-3.0。
+- **Github 仓库**：[Luogu-Jump-Plugin](https://github.com/oierlinch/Luogu-Jump-Plugin)。
 
 欢迎提交建议，帮助改进插件！
 
