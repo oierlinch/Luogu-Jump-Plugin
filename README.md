@@ -1,15 +1,9 @@
 ## 介绍
-专栏、剪切板和洛谷讨论区部分帖子被封印了，无法查看。此脚本可自动跳转至相应保存站。可自动识别可见帖子、自己的文章、剪切板等内容不跳转，没有被墙住（即内容可见）时不跳转，请复制下方该插件代码至油猴使用。最后更新于 2025-04-06。
+建议前往 <https://www.luogu.com.cn/article/h1qvkk68>。
 
-> **已知 Bug1：**
-> 由于洛谷前端和技术原因，在从新前端跳转至帖子时可能无法直接正常跳转保存站。
-> 
-> 此时有两种方案：
-> 
-> - 打开时在新标签页中打开（快捷键 Ctrl+点击链接）。（应该很多人都有这个习惯）
-> - 也可以在加载完成后手动点击刷新或按 F5 刷新页面。
-> 
-> 对于其他无法成功跳转的情况，也可以使用第二种方案重试。
+目前支持跳转不可见帖子（已删帖、不被信任用户未提交的题目相关帖子，不包括不合法的 Discuss ID），他人的云剪切板，他人的专栏文章。
+
+专栏、剪切板和洛谷讨论区部分帖子被封印了，无法查看。此脚本可自动跳转至相应保存站。可自动识别可见帖子、自己的文章、剪切板等内容不跳转，没有被墙住（即内容可见）时不跳转，请复制下方该插件代码至油猴使用。最后更新于 2025-04-12。
 
 如果脚本有其他 Bug 或您有已知 Bug 的解决方案，欢迎向 @[linch](https://www.luogu.com.cn/user/737242) 反馈，我们会及时处理！
 
@@ -21,13 +15,11 @@
 // ==UserScript==
 // @name         洛谷保存站自动跳转
 // @namespace    https://www.tampermonkey.net/
-// @version      1.3
-// @description  luogu.com 和洛谷讨论区部分帖子被封印了，此脚本可自动跳转至相应保存站，产品链接 https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin。
+// @version      1.4
+// @description  luogu.com 和洛谷讨论区部分帖子被封印了，此脚本可自动跳转至相应保存站，产品链接 https://www.luogu.com.cn/article/h1qvkk68。由于洛谷专栏公开可见需要审核，无法访问时请使用备用链接 https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin 或 https://www.luogu.me/article/h1qvkk68。
 // @author       linch & Vitamin_B
-// @match        *://*.luogu.com/article/*
-// @match        *://*.luogu.com/paste/*
-// @match        *://*.luogu.com.cn/discuss/*
-// @match        *://*.luogu.com/discuss/*
+// @match        *://*.luogu.com/*
+// @match        *://*.luogu.com.cn/*
 // @icon         https://cdn.luogu.com.cn/upload/image_hosting/u8fj7st9.png
 // ==/UserScript==
 
@@ -35,7 +27,7 @@
 
 (function() {
     'use strict';
-    window.addEventListener('load', function() {
+    function work(){
         let a = document.URL;
         let t = document.documentElement.outerHTML;
         let b = "https://lglg.top/";
@@ -74,19 +66,15 @@
                 }
                 else b+=a[i];
             }
-            if(t.indexOf("You are unable to access</span> luogu.com</h2>")>=0){
+            if(t.indexOf("You are unable to access</span> luogu.com</h2>")>=0 && (a.indexOf("article")>=0 || a.indexOf("paste")>=0)){
                 console.log("即将跳转至云剪切板和专栏保存站");
                 window.location.replace(b);
             }
         }
-        /*
-   已知 Bug1：由于洛谷前端和技术原因，在从新前端跳转至帖子时可能无法直接正常跳转。
-
-   此时有两种简单便捷的方案：
-
-   - 打开时在新标签页中打开（快捷键 Ctrl+点击链接）。（应该很多人都有这个习惯）
-   - 也可以在加载完成后手动点击刷新或按 F5 刷新页面。
-   */
+    }
+    window.addEventListener('load', function() {
+        work();
+        setInterval(work,2000);
     }, false);
 })();
 ```
@@ -113,5 +101,5 @@
 - 跳转时在控制台发送信息，便于调试。
 - 修复已知问题。
 
-### Todo
-无法直接解决已知 bug，尝试在跳转失败时向用户弹窗提醒点击跳转。
+### V1.4 2025/4/12
+修复了新前端无法跳转的重大 bug，详见 [此 Issue](https://github.com/oierlinch/Luogu-Jump-Plugin/issues/1)。
