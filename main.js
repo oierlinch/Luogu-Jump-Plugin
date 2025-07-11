@@ -1,26 +1,87 @@
 // ==UserScript==
 // @name         洛谷保存站自动跳转
 // @namespace    https://www.tampermonkey.net/
-// @version      1.5
-// @description  luogu.com 和洛谷讨论区部分帖子被封印了，此脚本可自动跳转至相应保存站，产品链接 https://www.luogu.com.cn/article/h1qvkk68。由于洛谷专栏公开可见需要审核，无法访问时请使用备用链接 https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin 或 https://www.luogu.me/article/h1qvkk68。
+// @version      2.5
+// @description  luogu.com 和洛谷讨论区部分帖子被封印了，此脚本可自动跳转至相应保存站，产品链接 https://www.luogu.com.cn/article/h1qvkk68。由于洛谷专栏公开可见需要审核，无法访问时请使用备用链接 https://www.luogu.me/article/h1qvkk68。
 // @author       linch & Vitamin_B
 // @homepage     https://www.luogu.com.cn/user/737242
 // @match        *://*.luogu.com/*
 // @match        *://*.luogu.com.cn/*
 // @run-at       document-end
+// @license      GNU GPL-3.0
 // @icon         https://cdn.luogu.com.cn/upload/image_hosting/u8fj7st9.png
+// @grant        GM_xmlhttpRequest
+// @grant        GM_notification
+// @grant        GM_setValue
+// @grant        GM_getValue
 // ==/UserScript==
 
 // Copyright (c) 2025 linch Vitamin_B
 
 (function() {
     'use strict';
+
+    // 自动更新相关配置
+    const UPDATE_CHECK_INTERVAL = 7*24*60*60; // 忽略后7*24小时检查一次更新
+    const VERSION_URL = "https://www.luogu.me/article/h1qvkk68";
+    const CURRENT_VERSION = "2.5";
+    const now = Date.now();
+
+    // 检查更新
+    function checkUpdate() {
+        const lastCheck = GM_getValue("lastUpdateCheck", 0);
+        if (now - lastCheck < UPDATE_CHECK_INTERVAL) return;
+        GM_xmlhttpRequest({
+            method: "GET",
+            url: VERSION_URL,
+            onload: function(response) {
+
+                // 简单解析页面获取最新版本号
+                const latestVersion = parseVersion(response.responseText);
+                if (latestVersion && compareVersions(latestVersion, CURRENT_VERSION) > 0) {
+                    notifyUpdate(latestVersion);
+                }
+            },
+            onerror: function() {
+                console.log("更新检查失败");
+            }
+        });
+    }
+
+    // 解析版本号
+    function parseVersion(text) {
+        const versionMatch = text.match(/@version\s+([\d.]+)/);
+        return versionMatch ? versionMatch[1] : null;
+    }
+
+    // 比较版本号
+    function compareVersions(a, b) {
+        const partsA = a.split('.').map(Number);
+        const partsB = b.split('.').map(Number);
+        for (let i = 0; i < Math.max(partsA.length, partsB.length); i++) {
+            const partA = partsA[i] || 0;
+            const partB = partsB[i] || 0;
+            if (partA > partB) return 1;
+            if (partA < partB) return -1;
+        }
+        return 0;
+    }
+
+    // 通知更新
+    function notifyUpdate(latestVersion) {
+        var result = confirm("脚本【洛谷保存站自动跳转】有新版本可用\n当前版本:"+CURRENT_VERSION+"，最新版本: "+latestVersion+"\n点击确定前往更新。忽略后 7 天内将不再提醒");
+        GM_setValue("lastUpdateCheck", now);
+        if(result) window.location.replace(VERSION_URL);
+    }
+
+    // 原有功能代码
     function work(){
         let a = document.URL;
         let t = document.documentElement.outerHTML;
         let b = "https://lglg.top/";
         let c=-1;
         let f = document.title;
+
         //帖子跳转 by linch
         for (let i = 0; i < a.length; i++) {
             if (i < a.length - 8 && a[i] == 'd' && a[i + 1] == 'i' && a[i + 2] == 's' && a[i + 3] == 'c' && a[i + 4] == 'u' && a[i + 5] == 's' && a[i + 6] == 's' && a[i+7]!='?') {
@@ -28,8 +89,9 @@
                 break;
             }
         }
+
         if(c!=-1){
-            if(t.indexOf("You are unable to access</span> luogu.com</h2>")>=0){
+            if(f.indexOf("cannot serve content")>=0){
                 b = "https://www.luogu.com.cn/discuss/";
                 for(let i=c;i<a.length;i++){
                     b+=a[i];
@@ -37,7 +99,8 @@
                 console.log("即将跳转至洛谷中国站");
                 window.location.replace(b);
             }
-            if(t.indexOf("该内容已删除")>=0 || t.indexOf("题目讨论版需要有提交才能查看")>=0 || t.indexOf("请先登录")>=0){
+            if(t.indexOf("该内容已删除")>=0 || t.indexOf("题目讨论版需要有提交才能查看")>=0 || t.indexOf("请先登录")>=0 || t.indexOf("完成实名验证才能查看")>=0){
+                if(f.indexOf("Error")<0) return;
                 for(let i=c;i<a.length;i++){
                     b+=a[i];
                 }
@@ -55,7 +118,7 @@
                 }
                 else b+=a[i];
             }
-            if(t.indexOf("You are unable to access</span> luogu.com</h2>")>=0 && (a.indexOf("article")>=0 || a.indexOf("paste")>=0)){
+            if(f.indexOf("cannot serve content")>=0 && (a.indexOf("article")>=0 || a.indexOf("paste")>=0)){
                 console.log("即将跳转至云剪切板和专栏保存站");
                 window.location.replace(b);
             }
@@ -74,6 +137,8 @@
             }
         }
     }
+    // 初始化
+    checkUpdate();
     work();
-    setInterval(work,1000);//判断间隔，可自行调整。
+    setInterval(work, 1000);
 })();
