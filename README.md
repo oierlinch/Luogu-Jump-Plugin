@@ -1,3 +1,6 @@
+> [!tip]
+> **Github 仓库不一定及时更新，建议前往 <https://www.luogu.com.cn/article/h1qvkk68> 查看。**
+
 ## 简介
 ### 插件说明
 本插件支持以下功能：
@@ -11,6 +14,9 @@
 - 智能识别可见内容，避免不必要的跳转。
 - 跳转时在控制台输出信息，方便联系我们定位问题。
 - 在洛谷跳转安全界面自动转至国际站，减少不必要操作。
+- 支持新版本更新提醒。
+> [!warning]
+> 当更新提醒无法跳转时，请检查该站点的浏览器【重定向】权限或直接访问本专栏文章。
 
 ### 贡献情况
 目前大部分代码均由 @[linch](https://www.luogu.com.cn/user/737242) 完成，并对所有代码进行优化更新。也感谢 @[Vitamin_B](https://www.luogu.com.cn/user/743373) 提供部分代码。
@@ -20,14 +26,14 @@
 欢迎提交建议，帮助改进插件！
 
 ### 代码
-**您可以在 [Greasyfork](https://greasyfork.org/zh-CN/scripts/541091-%E6%B4%9B%E8%B0%B7%E4%BF%9D%E5%AD%98%E7%AB%99%E8%87%AA%E5%8A%A8%E8%B7%B3%E8%BD%AC) 中安装此插件。**
 
-**也可以直接将下方代码复制进 Tampermonkey 中使用。**
-```javascript
+
+**请直接将下方代码复制进 Tampermonkey 中使用。**
+```javascript lines=25-25
 // ==UserScript==
 // @name         洛谷保存站自动跳转
 // @namespace    https://www.tampermonkey.net/
-// @version      2.5
+// @version      2.5.1
 // @description  luogu.com 和洛谷讨论区部分帖子被封印了，此脚本可自动跳转至相应保存站，产品链接 https://www.luogu.com.cn/article/h1qvkk68。由于洛谷专栏公开可见需要审核，无法访问时请使用备用链接 https://www.luogu.me/article/h1qvkk68。
 // @author       linch & Vitamin_B
 // @homepage     https://www.luogu.com.cn/user/737242
@@ -49,8 +55,8 @@
 
     // 自动更新相关配置
     const UPDATE_CHECK_INTERVAL = 7*24*60*60; // 忽略后7*24小时检查一次更新
-    const VERSION_URL = "https://www.luogu.me/article/h1qvkk68";
-    const CURRENT_VERSION = "2.5";
+    const VERSION_URL = "https://www.luogu.com.cn/article/h1qvkk68";
+    const CURRENT_VERSION = "2.5.1";
     const now = Date.now();
 
     // 检查更新
@@ -95,12 +101,11 @@
 
     // 通知更新
     function notifyUpdate(latestVersion) {
-        var result = confirm("脚本【洛谷保存站自动跳转】有新版本可用\n当前版本:"+CURRENT_VERSION+"，最新版本: "+latestVersion+"\n点击确定前往更新。忽略后 7 天内将不再提醒");
+        var result = confirm("脚本【洛谷保存站自动跳转】有新版本可用\n当前版本:"+CURRENT_VERSION+"，最新版本: "+latestVersion+"\n点击确定前往更新。忽略后 7 天内将不再提醒（若点击后无法正常跳转，请直接访问 https://www.luogu.com.cn/article/h1qvkk68）");
         GM_setValue("lastUpdateCheck", now);
         if(result) window.location.replace(VERSION_URL);
     }
 
-    // 原有功能代码
     function work(){
         let a = document.URL;
         let t = document.documentElement.outerHTML;
@@ -164,11 +169,18 @@
         }
     }
     // 初始化
-    checkUpdate();
+    checkUpdate();//不需要自动更新可注释。
     work();
-    setInterval(work, 1000);
+    setInterval(work, 1000);//自行修改判断时长。
 })();
 ```
+
+### 个性化设置
+1. 关闭自动更新：请注释掉第 140 行。
+2. 修改判断间隔：请修改第 142 行的数字，单位 ms。
+   > [!warning]
+   > 注意判断时间不宜过短，容易发生卡顿。由于洛谷部分页面具有错误 3s 后返回上一页的特性，为防止影响使用效果，不宜超过 3000ms。
+3. 忽略更新提醒后不检查时长。默认为 7 天，可在代码 25 行更改。
 
 ### 项目应用
 
@@ -211,6 +223,13 @@
 #### V2.5 - 2025/7/9
 - 修复自动更新的 bug。
 
+#### V2.5.1 - 2025/7/26
+- 更新提醒中添加无法跳转的提示。
+- 文章增加个性化设置提示。
+
 ## 联系我们
+
 - **洛谷私信**：[给 linch 发送私信](https://www.luogu.com.cn/chat?uid=737242)。
 - **Github 仓库**：[Luogu Jump Plugin](https://github.com/oierlinch/Luogu-Jump-Plugin)。
+- **GreasyFork**：[洛谷保存站自动跳转](https://greasyfork.org/zh-CN/scripts/541091-%E6%B4%9B%E8%B0%B7%E4%BF%9D%E5%AD%98%E7%AB%99%E8%87%AA%E5%8A%A8%E8%B7%B3%E8%BD%AC)。
+- **博客园**：[洛谷保存站自动跳转](https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin)。
