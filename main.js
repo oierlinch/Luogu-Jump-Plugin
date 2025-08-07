@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         洛谷保存站自动跳转
 // @namespace    https://www.tampermonkey.net/
-// @version      2.5
+// @version      2.5.1
 // @description  luogu.com 和洛谷讨论区部分帖子被封印了，此脚本可自动跳转至相应保存站，产品链接 https://www.luogu.com.cn/article/h1qvkk68。由于洛谷专栏公开可见需要审核，无法访问时请使用备用链接 https://www.luogu.me/article/h1qvkk68。
 // @author       linch & Vitamin_B
 // @homepage     https://www.luogu.com.cn/user/737242
@@ -23,8 +23,8 @@
 
     // 自动更新相关配置
     const UPDATE_CHECK_INTERVAL = 7*24*60*60; // 忽略后7*24小时检查一次更新
-    const VERSION_URL = "https://www.luogu.me/article/h1qvkk68";
-    const CURRENT_VERSION = "2.5";
+    const VERSION_URL = "https://www.luogu.com.cn/article/h1qvkk68";
+    const CURRENT_VERSION = "2.5.1";
     const now = Date.now();
 
     // 检查更新
@@ -69,12 +69,11 @@
 
     // 通知更新
     function notifyUpdate(latestVersion) {
-        var result = confirm("脚本【洛谷保存站自动跳转】有新版本可用\n当前版本:"+CURRENT_VERSION+"，最新版本: "+latestVersion+"\n点击确定前往更新。忽略后 7 天内将不再提醒");
+        var result = confirm("脚本【洛谷保存站自动跳转】有新版本可用\n当前版本:"+CURRENT_VERSION+"，最新版本: "+latestVersion+"\n点击确定前往更新。忽略后 7 天内将不再提醒（若点击后无法正常跳转，请直接访问 https://www.luogu.com.cn/article/h1qvkk68）");
         GM_setValue("lastUpdateCheck", now);
         if(result) window.location.replace(VERSION_URL);
     }
 
-    // 原有功能代码
     function work(){
         let a = document.URL;
         let t = document.documentElement.outerHTML;
@@ -138,7 +137,7 @@
         }
     }
     // 初始化
-    checkUpdate();
+    checkUpdate();//不需要自动更新可注释。
     work();
-    setInterval(work, 1000);
+    setInterval(work, 1000);//自行修改判断时长。
 })();
