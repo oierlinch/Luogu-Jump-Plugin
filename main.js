@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         洛谷保存站自动跳转
 // @namespace    https://www.tampermonkey.net/
-// @version      2.5.1
+// @version      3.0
 // @description  luogu.com 和洛谷讨论区部分帖子被封印了，此脚本可自动跳转至相应保存站，产品链接 https://www.luogu.com.cn/article/h1qvkk68。由于洛谷专栏公开可见需要审核，无法访问时请使用备用链接 https://www.luogu.me/article/h1qvkk68。
 // @author       linch & Vitamin_B
 // @homepage     https://www.luogu.com.cn/user/737242
 // @match        *://*.luogu.com/*
 // @match        *://*.luogu.com.cn/*
+// @match        *://*.luogu.me/*
 // @run-at       document-end
 // @license      GNU GPL-3.0
 // @icon         https://cdn.luogu.com.cn/upload/image_hosting/u8fj7st9.png
@@ -20,12 +21,16 @@
 
 (function() {
     'use strict';
-
     // 自动更新相关配置
     const UPDATE_CHECK_INTERVAL = 7*24*60*60; // 忽略后7*24小时检查一次更新
     const VERSION_URL = "https://www.luogu.com.cn/article/h1qvkk68";
-    const CURRENT_VERSION = "2.5.1";
+    const CURRENT_VERSION = "3.0";
     const now = Date.now();
+    let a = document.URL;
+    let t = document.documentElement.outerHTML;
+    let b = "https://lglg.top/";
+    let c=-1;
+    let f = document.title;
 
     // 检查更新
     function checkUpdate() {
@@ -75,11 +80,6 @@
     }
 
     function work(){
-        let a = document.URL;
-        let t = document.documentElement.outerHTML;
-        let b = "https://lglg.top/";
-        let c=-1;
-        let f = document.title;
 
         //帖子跳转 by linch
         for (let i = 0; i < a.length; i++) {
@@ -136,8 +136,25 @@
             }
         }
     }
-    // 初始化
+    function isElementDisplayed(element) {
+        return window.getComputedStyle(element).display == 'none';
+    }
+    function closead(){
+        let f=document.getElementById('announcement-overlay');
+        let x=isElementDisplayed(f);
+        if(!x){
+            console.log(nextAnnouncementOrClose());
+        }
+        return x;
+    }
+    function tryclose(){
+        var interval=setInterval(function(){
+            if(closead()) clearInterval(interval);
+        },1000);
+    }
     checkUpdate();//不需要自动更新可注释。
     work();
-    setInterval(work, 1000);//自行修改判断时长。
+    tryclose();
+    if(a.indexOf("luogu.me")!=-1 && (f.indexOf("保存文章")!=-1 || f.indexOf("保存剪贴板")!=-1)) console.log(saveArticle());
+    setInterval(work, 2000);//自行修改判断时长。
 })();
