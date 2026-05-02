@@ -1,13 +1,15 @@
 // ==UserScript==
-// @name         洛谷保存站自动跳转
+// @name         洛谷保存站自动跳转（轻量版）
 // @namespace    https://www.tampermonkey.net/
-// @version      3.0
-// @description  luogu.com 和洛谷讨论区部分帖子被封印了，此脚本可自动跳转至相应保存站，产品链接 https://www.luogu.com.cn/article/h1qvkk68。由于洛谷专栏公开可见需要审核，无法访问时请使用备用链接 https://www.luogu.me/article/h1qvkk68。
+// @version      Latest
+// @description  luogu.com 和洛谷讨论区部分帖子被封印了，此脚本可自动跳转至相应保存站，产品链接 https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin
 // @author       linch & Vitamin_B
 // @homepage     https://www.luogu.com.cn/user/737242
-// @match        *://*.luogu.com/*
-// @match        *://*.luogu.com.cn/*
-// @match        *://*.luogu.me/*
+// @match        *://*.luogu.com/paste/*
+// @match        *://*.luogu.com/article/*
+// @match        *://*.luogu.com.cn/paste/*
+// @match        *://*.luogu.com.cn/article/*
+
 // @run-at       document-end
 // @license      GNU GPL-3.0
 // @icon         https://cdn.luogu.com.cn/upload/image_hosting/u8fj7st9.png
@@ -23,7 +25,7 @@
     'use strict';
     // 自动更新相关配置
     const UPDATE_CHECK_INTERVAL = 7*24*60*60; // 忽略后7*24小时检查一次更新
-    const VERSION_URL = "https://www.luogu.com.cn/article/h1qvkk68";
+    const VERSION_URL = "https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin";
     const CURRENT_VERSION = "3.0";
     const now = Date.now();
     let a = document.URL;
@@ -74,21 +76,12 @@
 
     // 通知更新
     function notifyUpdate(latestVersion) {
-        var result = confirm("脚本【洛谷保存站自动跳转】有新版本可用\n当前版本:"+CURRENT_VERSION+"，最新版本: "+latestVersion+"\n点击确定前往更新。忽略后 7 天内将不再提醒（若点击后无法正常跳转，请直接访问 https://www.luogu.com.cn/article/h1qvkk68）");
+        var result = confirm("脚本【洛谷保存站自动跳转】有新版本可用\n当前版本:"+CURRENT_VERSION+"，最新版本: "+latestVersion+"\n点击确定前往更新。忽略后 7 天内将不再提醒（若点击后无法正常跳转，请直接访问 https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin）");
         GM_setValue("lastUpdateCheck", now);
         if(result) window.location.replace(VERSION_URL);
     }
 
     function work(){
-
-        //帖子跳转 by linch
-        for (let i = 0; i < a.length; i++) {
-            if (i < a.length - 8 && a[i] == 'd' && a[i + 1] == 'i' && a[i + 2] == 's' && a[i + 3] == 'c' && a[i + 4] == 'u' && a[i + 5] == 's' && a[i + 6] == 's' && a[i+7]!='?') {
-                c=i+8;
-                break;
-            }
-        }
-
         if(c!=-1){
             if(f.indexOf("cannot serve content")>=0){
                 b = "https://www.luogu.com.cn/discuss/";
@@ -136,25 +129,8 @@
             }
         }
     }
-    function isElementDisplayed(element) {
-        return window.getComputedStyle(element).display == 'none';
-    }
-    function closead(){
-        let f=document.getElementById('announcement-overlay');
-        let x=isElementDisplayed(f);
-        if(!x){
-            console.log(nextAnnouncementOrClose());
-        }
-        return x;
-    }
-    function tryclose(){
-        var interval=setInterval(function(){
-            if(closead()) clearInterval(interval);
-        },1000);
-    }
-    checkUpdate();//不需要自动更新可注释。
+    //checkUpdate();//不需要自动更新可注释。
     work();
-    tryclose();
-    if(a.indexOf("luogu.me")!=-1 && (f.indexOf("保存文章")!=-1 || f.indexOf("保存剪贴板")!=-1)) console.log(saveArticle());
-    setInterval(work, 2000);//自行修改判断时长。
+
+    //setInterval(work, 2000);//自行修改判断时长。
 })();
