@@ -1,5 +1,5 @@
-> [!tip]
-> **Github 仓库不一定及时更新，建议前往 <https://www.luogu.com.cn/article/h1qvkk68> 查看。**
+> [!Note]
+> 本插件功能已经趋于稳定。**自即日起不再推送新更新。**
 
 ## 简介
 ### 插件说明
@@ -14,7 +14,6 @@
 - 智能识别可见内容，避免不必要的跳转。
 - 跳转时在控制台输出信息，方便联系我们定位问题。
 - 在洛谷跳转安全界面自动转至国际站，减少不必要操作。
-- 支持新版本更新提醒。
 > [!warning]
 > 当更新提醒无法跳转时，请检查该站点的浏览器【重定向】权限或直接访问本专栏文章。
 
@@ -25,28 +24,21 @@
 
 欢迎提交建议，帮助改进插件！
 
-### 个性化设置
-1. 关闭自动更新：请注释掉第 155 行。
-2. 修改判断间隔：请修改第 159 行的数字，单位 ms。
-> [!warning]
-> 注意判断时间不宜过短，容易发生卡顿。由于洛谷部分页面具有错误 3s 后返回上一页的特性，为防止影响使用效果，不宜超过 3000ms。
-3. 忽略更新提醒后不检查时长。默认为 7 天，可在代码 25 行更改。
-4. 关闭自动保存：请注释第 158 行。
-5. 关闭自动点击公告：请注释第 157 行。
-
 ### 代码
 **请直接将下方代码复制进 Tampermonkey 中使用。**
 ```javascript
 // ==UserScript==
-// @name         洛谷保存站自动跳转
+// @name         洛谷保存站自动跳转（轻量版）
 // @namespace    https://www.tampermonkey.net/
-// @version      3.0
-// @description  luogu.com 和洛谷讨论区部分帖子被封印了，此脚本可自动跳转至相应保存站，产品链接 https://www.luogu.com.cn/article/h1qvkk68。由于洛谷专栏公开可见需要审核，无法访问时请使用备用链接 https://www.luogu.me/article/h1qvkk68。
+// @version      Latest
+// @description  luogu.com 和洛谷讨论区部分帖子被封印了，此脚本可自动跳转至相应保存站，产品链接 https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin
 // @author       linch & Vitamin_B
 // @homepage     https://www.luogu.com.cn/user/737242
-// @match        *://*.luogu.com/*
-// @match        *://*.luogu.com.cn/*
-// @match        *://*.luogu.me/*
+// @match        *://*.luogu.com/paste/*
+// @match        *://*.luogu.com/article/*
+// @match        *://*.luogu.com.cn/paste/*
+// @match        *://*.luogu.com.cn/article/*
+
 // @run-at       document-end
 // @license      GNU GPL-3.0
 // @icon         https://cdn.luogu.com.cn/upload/image_hosting/u8fj7st9.png
@@ -62,7 +54,7 @@
     'use strict';
     // 自动更新相关配置
     const UPDATE_CHECK_INTERVAL = 7*24*60*60; // 忽略后7*24小时检查一次更新
-    const VERSION_URL = "https://www.luogu.com.cn/article/h1qvkk68";
+    const VERSION_URL = "https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin";
     const CURRENT_VERSION = "3.0";
     const now = Date.now();
     let a = document.URL;
@@ -113,21 +105,12 @@
 
     // 通知更新
     function notifyUpdate(latestVersion) {
-        var result = confirm("脚本【洛谷保存站自动跳转】有新版本可用\n当前版本:"+CURRENT_VERSION+"，最新版本: "+latestVersion+"\n点击确定前往更新。忽略后 7 天内将不再提醒（若点击后无法正常跳转，请直接访问 https://www.luogu.com.cn/article/h1qvkk68）");
+        var result = confirm("脚本【洛谷保存站自动跳转】有新版本可用\n当前版本:"+CURRENT_VERSION+"，最新版本: "+latestVersion+"\n点击确定前往更新。忽略后 7 天内将不再提醒（若点击后无法正常跳转，请直接访问 https://www.cnblogs.com/oierlinch/p/18717023/luogu-jump-plugin）");
         GM_setValue("lastUpdateCheck", now);
         if(result) window.location.replace(VERSION_URL);
     }
 
     function work(){
-
-        //帖子跳转 by linch
-        for (let i = 0; i < a.length; i++) {
-            if (i < a.length - 8 && a[i] == 'd' && a[i + 1] == 'i' && a[i + 2] == 's' && a[i + 3] == 'c' && a[i + 4] == 'u' && a[i + 5] == 's' && a[i + 6] == 's' && a[i+7]!='?') {
-                c=i+8;
-                break;
-            }
-        }
-
         if(c!=-1){
             if(f.indexOf("cannot serve content")>=0){
                 b = "https://www.luogu.com.cn/discuss/";
@@ -175,27 +158,10 @@
             }
         }
     }
-    function isElementDisplayed(element) {
-        return window.getComputedStyle(element).display == 'none';
-    }
-    function closead(){
-        let f=document.getElementById('announcement-overlay');
-        let x=isElementDisplayed(f);
-        if(!x){
-            console.log(nextAnnouncementOrClose());
-        }
-        return x;
-    }
-    function tryclose(){
-        var interval=setInterval(function(){
-            if(closead()) clearInterval(interval);
-        },1000);
-    }
-    checkUpdate();//不需要自动更新可注释。
+    //checkUpdate();//不需要自动更新可注释。
     work();
-    tryclose();
-    if(a.indexOf("luogu.me")!=-1 && (f.indexOf("保存文章")!=-1 || f.indexOf("保存剪贴板")!=-1)) console.log(saveArticle());
-    setInterval(work, 2000);//自行修改判断时长。
+
+    //setInterval(work, 2000);//自行修改判断时长。
 })();
 ```
 
@@ -243,6 +209,9 @@
 #### V2.5.1 - 2025/7/26
 - 更新提醒中添加无法跳转的提示。
 - 文章增加个性化设置提示。
+
+#### V3.0 Latest
+- 功能趋于稳定，不再更新，关闭自动更新功能和 2000ms 重复判断功能（洛谷已更新）。
 
 ## 联系我们
 
